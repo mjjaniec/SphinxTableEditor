@@ -13,19 +13,19 @@ object TableDrawer {
     printer.println()
   }
 
-  def drawTable(tableData: TableData): String = {
+  def drawTable(tableData: TableData, maxCellWidth: Option[Int] = None): String = {
     import java.io.PrintStream
     import java.nio.charset.StandardCharsets
     val baos = new ByteArrayOutputStream
 
     val ps = new PrintStream(baos, true, "UTF-8")
-    drawTable(ps, tableData)
+    drawTableToStream(ps, tableData, maxCellWidth)
 
     new String(baos.toByteArray, StandardCharsets.UTF_8)
   }
 
 
-  def drawTable(printer: PrintStream, tableData: TableData): Unit = {
+  def drawTableToStream(printer: PrintStream, tableData: TableData, maxCellWidth: Option[Int] = None): Unit = {
 
     def printHeaders(lengths: Seq[Int]): Unit = {
       printHorizontalLine(printer, lengths, bold = false)
@@ -37,7 +37,7 @@ object TableDrawer {
       printHorizontalLine(printer, lengths, bold = true)
     }
 
-    def printContent(lengths: Seq[Int], multilineCells: Seq[Seq[Array[String]]]): Unit = {
+    def printContent(lengths: Seq[Int], multilineCells: Seq[Seq[Seq[String]]]): Unit = {
       // Iteration in scala :O
       var rowNumber = 0
       while (rowNumber < multilineCells.head.length) {
@@ -63,13 +63,31 @@ object TableDrawer {
 
     if (tableData.data.head.nonEmpty) {
       val transponsed = transponse(tableData.data)
-      val multilineCells: Seq[Seq[Array[String]]] = transponsed.map(_.map(_.split("\n")))
+      val multilineCells: Seq[Seq[Seq[String]]] = transponsed
+        .map(_.map(_.split("\n").toSeq)
+          .map(shorten(_, maxCellWidth)))
       val lengths = multilineCells.map(_.iterator.map(_.map(_.length).max).max) zip tableData.headers.map(_.length) map {
         case (a, b) => Math.max(a, b) + 2
       }
 
       printHeaders(lengths)
       printContent(lengths, multilineCells)
+    }
+  }
+
+  private def shorten(strs: Seq[String], maxLength: Option[Int]): Seq[String] = {
+    maxLength.map { max =>
+      strs.flatMap(shorten(_, max))
+    }.getOrElse(strs)
+  }
+
+  private def shorten(str: String, max: Int): Seq[String] = {
+    if (str.length < max) {
+      Seq(str)
+    } else {
+      val cutPlace = str.take(max).lastIndexOf(' ')
+      if (cutPlace == -1) Seq(str)
+      else str.substring(0, cutPlace) +: shorten(str.substring(cutPlace + 1), max)
     }
   }
 
