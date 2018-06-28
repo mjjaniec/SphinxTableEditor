@@ -75,17 +75,21 @@ object TableDrawer {
 
   private def shorten(strs: Seq[String], maxLength: Option[Int]): Seq[String] = {
     maxLength.map { max =>
-      strs.flatMap(shorten(_, max))
+      strs.flatMap(str => shorten(str, max, str.matches("^\\s*\\* .*")))
     }.getOrElse(strs)
   }
 
-  private def shorten(str: String, max: Int): Seq[String] = {
+  private def shorten(str: String, max: Int, bulletList: Boolean): Seq[String] = {
     if (str.length < max) {
       Seq(str)
     } else {
       val cutPlace = str.take(max).lastIndexOf(' ')
-      if (cutPlace == -1) Seq(str)
-      else str.substring(0, cutPlace) +: shorten(str.substring(cutPlace + 1), max)
+      if (cutPlace == -1) {
+        Seq(str)
+      } else {
+        val prefix = if (bulletList) "  " else ""
+        str.substring(0, cutPlace) +: shorten(prefix + str.substring(cutPlace + 1), max, bulletList)
+      }
     }
   }
 
