@@ -30,7 +30,9 @@ object TableParser {
           }
           target = Vector.fill(columns)(new StringBuilder)
         case l =>
-          for ((cel, idx) <- l.split("\\|").drop(1).zipWithIndex) {
+          val cells = l.split("(?<!\\|[a-z]{0,20})\\|(?![a-z]+\\|)").drop(1)
+ 
+          for ((cel, idx) <- cells.take(columns).zipWithIndex) {
             val builder = target(idx)
             if (builder.nonEmpty) {
               builder.append("\n")
