@@ -12,10 +12,24 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
   private val header: HeaderView = new HeaderView(data.headers, lengths)
   private val rowsLayout = new VerticalLayout()
 
-  private val rows: mutable.Buffer[RowView] = data.rows.map(new RowView(_, lengths, r => {
-    rows.remove(rows.indexOf(r))
-    rowsLayout.removeComponent(r)
-  })).toBuffer
+  private val rows: mutable.Buffer[RowView] = data.rows.map { row =>
+    val deleteAction: RowView => Unit = r => {
+      rows.remove(rows.indexOf(r))
+      rowsLayout.removeComponent(r)
+    }
+
+    val addAction: RowView => Unit = r => {
+      val index = rows.indexOf(r) + 1
+      val newRow = new RowView(lengths.map(_ => ""), lengths, deleteAction)
+      rows.insert(index, newRow)
+      rowsLayout.addComponent(newRow, index)
+    }
+
+    val rv = new RowView(row, lengths, deleteAction)
+    rv.setAddAction(addAction)
+    rv
+  }.toBuffer
+
 
   {
     setSizeFull()
