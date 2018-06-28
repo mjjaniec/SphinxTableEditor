@@ -1,8 +1,6 @@
 package com.github.mjjaniec.tableRegenerator.ui
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableDrawer, TableParser}
-import com.vaadin.client.metadata.Property
-import com.vaadin.server.Page.Styles
 import com.vaadin.server.{Page, VaadinRequest}
 import com.vaadin.ui._
 import com.vaadin.ui.themes.ValoTheme
