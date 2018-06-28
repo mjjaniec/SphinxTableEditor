@@ -15,39 +15,6 @@ class TableRegeneratorUI extends UI {
 
     setSizeFull()
 
-    val input = new TextArea("Input")
-    input.setWordWrap(false)
-    input.setPlaceholder("Paste broken table here")
-    input.setSizeFull()
-    val regenerate = new Button("Regenerate")
-    regenerate.addStyleName(ValoTheme.BUTTON_PRIMARY)
-
-    val maxCellWidth = new TextField()
-    maxCellWidth.setPlaceholder("Max cell width")
-
-    val output = new TextArea("Output")
-    output.setWordWrap(false)
-    output.setSizeFull()
-
-    regenerate.addClickListener{_ =>
-      val jaggedTable = input.getValue
-      val tableData = TableParser.parse(jaggedTable)
-      val prettyTable = TableDrawer.drawTable(tableData, Try(maxCellWidth.getValue.toInt).toOption)
-      output.setValue(prettyTable)
-    }
-
-    val h = new HorizontalLayout(regenerate, maxCellWidth)
-
-    input.setSizeFull()
-    output.setSizeFull()
-
-    val layout = new VerticalLayout()
-    layout.addComponents(input, h, output)
-    h.setWidthUndefined()
-    layout.setExpandRatio(h, 0)
-    layout.setExpandRatio(input, 1)
-    layout.setExpandRatio(output, 1)
-    layout.setSizeFull()
-    setContent(layout)
+    setContent(new MainView)
   }
 }

@@ -59,8 +59,8 @@ object TableDrawer {
     }
 
 
-    if (tableData.data.head.nonEmpty) {
-      val transponsed = transponse(tableData.data)
+    if (tableData.rows.head.nonEmpty) {
+      val transponsed = transponse(tableData.rows)
       val multilineCells: Seq[Seq[Seq[String]]] = transponsed
         .map(_.map(_.split("\n").toSeq)
           .map(shorten(_, maxCellWidth)))
@@ -71,6 +71,18 @@ object TableDrawer {
       printHeaders(lengths)
       printContent(lengths, multilineCells)
     }
+  }
+
+
+  def computeLengts(tableData: TableData): Seq[Int] = {
+    val transponsed = transponse(tableData.rows)
+    val multilineCells: Seq[Seq[Seq[String]]] = transponsed
+      .map(_.map(_.split("\n").toSeq)
+        .map(shorten(_, None)))
+    val lengths = multilineCells.map(_.iterator.map(_.map(_.length).max).max) zip tableData.headers.map(_.length) map {
+      case (a, b) => Math.max(a, b) + 2
+    }
+    lengths
   }
 
   private def shorten(strs: Seq[String], maxLength: Option[Int]): Seq[String] = {
