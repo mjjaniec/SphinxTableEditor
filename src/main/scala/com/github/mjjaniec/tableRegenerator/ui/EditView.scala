@@ -4,11 +4,18 @@ import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer}
 import com.vaadin.ui.themes.ValoTheme
 import com.vaadin.ui.{Alignment, Button, Panel, VerticalLayout}
 
+import scala.collection.mutable
+
 class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
 
   private val lengths = TableDrawer.computeLengts(data)
   private val header: HeaderView = new HeaderView(data.headers, lengths)
-  private val rows: Seq[RowView] = data.rows.map(new RowView(_, lengths, () => ()))
+  private val rowsLayout = new VerticalLayout()
+
+  private val rows: mutable.Buffer[RowView] = data.rows.map(new RowView(_, lengths, r => {
+    rows.remove(rows.indexOf(r))
+    rowsLayout.removeComponent(r)
+  })).toBuffer
 
   {
     setSizeFull()
@@ -25,8 +32,8 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
     val rowsPanel = new Panel()
     rowsPanel.setSizeFull()
     rowsPanel.addStyleName(ValoTheme.PANEL_BORDERLESS)
-    val rowsLayout = new VerticalLayout(rows: _*)
     rowsLayout.setMargin(false)
+    rowsLayout.addComponents(rows: _*)
     rowsPanel.setContent(rowsLayout)
 
     addComponent(rowsPanel)

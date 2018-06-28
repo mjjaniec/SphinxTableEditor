@@ -3,7 +3,7 @@ package com.github.mjjaniec.tableRegenerator.ui
 import com.vaadin.ui.themes.ValoTheme
 import com.vaadin.ui.{Button, HorizontalLayout, TextArea}
 
-class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: () => Unit) extends HorizontalLayout {
+class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit) extends HorizontalLayout {
   private val editors: Seq[TextArea] = for {
     (cell, len) <- row zip lengths
   } yield {
@@ -17,8 +17,14 @@ class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: () => Unit) ext
   {
 
     val delete = new Button()
-    delete.addClickListener(_ => deleteAction.apply)
+    delete.addClickListener(_ => deleteAction.apply(this))
+    delete.addStyleName(ValoTheme.BUTTON_SMALL)
     delete.addStyleName(ValoTheme.BUTTON_DANGER)
+    delete.setCaption("x")
+    delete.setWidth("36px")
+    delete.setHeight("100%")
+
+    addComponent(delete)
 
     setWidth("100%")
   }
