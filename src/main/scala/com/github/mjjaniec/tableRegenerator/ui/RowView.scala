@@ -29,12 +29,14 @@ class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit
     delete.addStyleName(ValoTheme.BUTTON_SMALL)
     delete.addStyleName(ValoTheme.BUTTON_DANGER)
     delete.setCaption("x")
-    delete.setWidth("36px")
+    delete.setWidth("37px")
+    delete.setHeight("37px")
 
     add.addStyleName(ValoTheme.BUTTON_SMALL)
     add.addStyleName(ValoTheme.BUTTON_FRIENDLY)
     add.setCaption("+")
-    add.setWidth("36px")
+    add.setWidth("37px")
+    add.setHeight("37px")
 
     vert.addComponents(delete, add)
     vert.setComponentAlignment(add, Alignment.MIDDLE_CENTER)

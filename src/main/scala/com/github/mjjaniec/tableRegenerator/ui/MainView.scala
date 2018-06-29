@@ -15,13 +15,6 @@ class MainView extends VerticalLayout {
   {
     input.setWordWrap(false)
     input.setPlaceholder("Paste broken table here")
-    input.setValue("""+------------------------+------------+----------+----------+
-                     || Header row, column 1   | Header 2   | Header 3 | Header 4 |
-                     |+========================+============+==========+==========+
-                     || body row 1, column 1   | column 2   | column 3 | column 4 |
-                     |+------------------------+------------+----------+----------+
-                     || body row 2             | ...        | ...      |          |
-                     |+------------------------+------------+----------+----------+""".stripMargin)
     input.setSizeFull()
     val regenerate = new Button("Regenerate")
     regenerate.addStyleName(ValoTheme.BUTTON_PRIMARY)
@@ -46,7 +39,18 @@ class MainView extends VerticalLayout {
       getUI.setContent(new EditView(this, tableData))
     }
 
-    val h = new HorizontalLayout(regenerate, maxCellWidth, new Label(""), edit)
+    val example = new Button("Example")
+    example.addClickListener(_ =>
+      input.setValue(
+        """+------------------------+------------+----------+----------+
+          || Header row, column 1   | Header 2   | Header 3 | Header 4 |
+          |+========================+============+==========+==========+
+          || body row 1, column 1   | column 2   | column 3 | column 4 |
+          |+------------------------+------------+----------+----------+
+          || body row 2             | ...        | ...      |          |
+          |+------------------------+------------+----------+----------+""".stripMargin))
+
+    val h = new HorizontalLayout(regenerate, maxCellWidth, new Label(""), edit, new Label(""), example)
 
     input.setSizeFull()
     output.setSizeFull()
