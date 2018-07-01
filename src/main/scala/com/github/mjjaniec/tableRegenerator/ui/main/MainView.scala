@@ -1,11 +1,11 @@
-package com.github.mjjaniec.tableRegenerator.ui.main
+package com.github.mjjaniec.tableRegenerator
+package ui.main
 
-import com.github.mjjaniec.tableRegenerator.logic.{TableDrawer, TableParser}
+import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer, TableParser}
 import com.github.mjjaniec.tableRegenerator.ui.edit.EditView
 import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
-import com.vaadin.ui._
-
-import scala.util.Try
+import com.vaadin.ui.VerticalLayout
+import org.apache.commons.lang3.StringUtils
 
 class MainView extends VerticalLayout {
 
@@ -21,19 +21,25 @@ class MainView extends VerticalLayout {
 
   private val maxCellWidth = Vui.textField.placeholder("Max cell width").get
 
-  private val regenerate = Vui.button.caption("Regenerate").primary
-    .onClick { _ =>
-      val jaggedTable = input.getValue
-      val tableData = TableParser.parse(jaggedTable)
-      val prettyTable = TableDrawer.drawTable(tableData, Try(maxCellWidth.getValue.toInt).toOption)
-      output.setValue(prettyTable)
+  private def withTable(action: TableData => Unit): Unit = {
+    val jaggedTable = input.getValue
+    if (StringUtils.isBlank(jaggedTable)) {
+      Vui.notification("Please paste a sphinx table above").info.show()
+    } else {
+      TableParser.parse(jaggedTable) match {
+        case Success(tableData) => action(tableData)
+        case Failure(_) => Vui.notification("Invalid table:").error.show()
+      }
+    }
+  }
+
+  private val regenerate = Vui.button.caption("Regenerate").primary.onClick { _ =>
+      withTable(TableDrawer.drawTable(_, Try(maxCellWidth.getValue.toInt).toOption) |> output.setValue)
     }.get
 
 
   private val edit = Vui.button.caption("Edit").onClick { _ =>
-    val jaggedTable = input.getValue
-    val tableData = TableParser.parse(jaggedTable)
-    getUI.setContent(new EditView(this, tableData))
+    withTable(tableData => getUI.setContent(new EditView(this, tableData)))
   }.get
 
   private val example = Vui.button.caption("Example").onClick(_ =>

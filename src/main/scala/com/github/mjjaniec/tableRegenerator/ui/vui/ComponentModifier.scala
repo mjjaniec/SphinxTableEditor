@@ -2,7 +2,7 @@ package com.github.mjjaniec.tableRegenerator.ui.vui
 
 import com.vaadin.ui.Component
 
-class ComponentModifier[C <: Component](c: C) {
+class ComponentModifier[C <: Component](c: C) extends AbstractModifier[C](c) {
 
   def sizeFull: this.type = mod(_.setSizeFull())
 
@@ -23,12 +23,5 @@ class ComponentModifier[C <: Component](c: C) {
   def style(cssClassNames: String*): this.type = mod(_.addStyleNames(cssClassNames: _*))
 
   def caption(caption: String): this.type = mod(_.setCaption(caption))
-
-  def get: C = c
-
-  final protected def mod(modification: C => Unit): this.type = {
-    modification(c)
-    this
-  }
 
 }

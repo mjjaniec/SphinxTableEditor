@@ -1,6 +1,6 @@
 package com.github.mjjaniec.tableRegenerator.ui.vui
 
-import com.vaadin.ui.{Alignment, Button, Component, HorizontalLayout, Label, Panel, TextArea, TextField, VerticalLayout}
+import com.vaadin.ui.{Alignment, Button, Component, HorizontalLayout, Label, Notification, Panel, TextArea, TextField, VerticalLayout}
 
 
 object Vui {
@@ -24,6 +24,9 @@ object Vui {
 
   def mod(p: Panel): PanelModifier = new PanelModifier(p)
   def panel: PanelModifier = new PanelModifier(new Panel())
+
+  def mod(n: Notification): NotificationModifier = new NotificationModifier(n)
+  def notification(caption: String): NotificationModifier = new NotificationModifier(new Notification(caption))
 
   def hSpace(width: String): Component = label.width(width).get
   def vSpace(height: String): Component = label.height(height).widthUndefined.get
