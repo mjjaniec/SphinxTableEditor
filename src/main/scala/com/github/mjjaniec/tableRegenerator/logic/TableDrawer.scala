@@ -87,26 +87,10 @@ object TableDrawer {
 
   private def shorten(strs: Seq[String], maxLength: Option[Int]): Seq[String] = {
     maxLength.map { max =>
-      strs.flatMap(str => shorten(str, max, str.matches("^\\s*\\* .*")))
+      strs.flatMap(str => Shortener.shorten(str, max, if(str.matches("^\\s*\\* .*")) "  " else ""))
     }.getOrElse(strs)
   }
 
-  private def findCutPlace(str: String, max: Int): Option[Int] = {
-    if (str.length < max) {
-      None
-    } else {
-      Some(str.take(max).lastIndexOf(' '))
-        .filter(_ != -1)
-        .orElse(Some(str.indexOf(' ')).filter(_ != -1))
-    }
-  }
-
-  private def shorten(str: String, max: Int, bulletList: Boolean): Seq[String] = {
-    findCutPlace(str, max).map { cutPlace =>
-      val prefix = if (bulletList) "  " else ""
-      str.substring(0, cutPlace) +: shorten(prefix + str.substring(cutPlace + 1), max, bulletList)
-    }.getOrElse(Seq(str))
-  }
 
   private def transponse[A](data: Seq[Seq[A]]): Seq[Seq[A]] = {
     val buffers = Vector.fill(data.head.size)(mutable.Buffer.empty[A])

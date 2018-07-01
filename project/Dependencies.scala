@@ -18,6 +18,8 @@ object Dependencies {
     "org.eclipse.jetty" % "jetty-server" % V.jetty,
     "org.eclipse.jetty" % "jetty-servlet" % V.jetty,
 
-    "com.avsystem.commons" %% "commons-core" % V.avcommons
+    "com.avsystem.commons" %% "commons-core" % V.avcommons,
+
+    "org.scalatest" %% "scalatest" % "3.0.5" % Test
   )
 }
