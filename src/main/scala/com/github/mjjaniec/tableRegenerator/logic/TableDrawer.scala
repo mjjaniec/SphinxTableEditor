@@ -91,18 +91,21 @@ object TableDrawer {
     }.getOrElse(strs)
   }
 
-  private def shorten(str: String, max: Int, bulletList: Boolean): Seq[String] = {
+  private def findCutPlace(str: String, max: Int): Option[Int] = {
     if (str.length < max) {
-      Seq(str)
+      None
     } else {
-      val cutPlace = str.take(max).lastIndexOf(' ')
-      if (cutPlace == -1) {
-        Seq(str)
-      } else {
-        val prefix = if (bulletList) "  " else ""
-        str.substring(0, cutPlace) +: shorten(prefix + str.substring(cutPlace + 1), max, bulletList)
-      }
+      Some(str.take(max).lastIndexOf(' '))
+        .filter(_ != -1)
+        .orElse(Some(str.indexOf(' ')).filter(_ != -1))
     }
+  }
+
+  private def shorten(str: String, max: Int, bulletList: Boolean): Seq[String] = {
+    findCutPlace(str, max).map { cutPlace =>
+      val prefix = if (bulletList) "  " else ""
+      str.substring(0, cutPlace) +: shorten(prefix + str.substring(cutPlace + 1), max, bulletList)
+    }.getOrElse(Seq(str))
   }
 
   private def transponse[A](data: Seq[Seq[A]]): Seq[Seq[A]] = {
