@@ -1,6 +1,7 @@
-package com.github.mjjaniec.tableRegenerator.ui
+package com.github.mjjaniec.tableRegenerator.ui.main
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableDrawer, TableParser}
+import com.github.mjjaniec.tableRegenerator.ui.edit.EditView
 import com.github.mjjaniec.tableRegenerator.ui.modifiers.Mods
 import com.vaadin.ui._
 
@@ -35,6 +36,17 @@ class MainView extends VerticalLayout {
     getUI.setContent(new EditView(this, tableData))
   }.get
 
+  private val example = Mods.button.caption("Example").onClick(_ =>
+    input.setValue(
+      """+------------------------+------------+----------+----------+
+        || Header row, column 1   | Header 2   | Header 3 | Header 4 |
+        |+========================+============+==========+==========+
+        || body row 1, column 1   | column 2   | column 3 | column 4 |
+        |+------------------------+------------+----------+----------+
+        || body row 2             | ...        | ...      |          |
+        |+------------------------+------------+----------+----------+""".stripMargin))
+    .get
+
   Mods.mod(this)
     .sizeFull
     .add(input, 1)
@@ -42,7 +54,9 @@ class MainView extends VerticalLayout {
       .add(regenerate)
       .add(maxCellWidth)
       .add(Mods.hSpace("40px"))
-      .add(edit).get, 0)
+      .add(edit)
+      .add(example)
+      .get, 0)
     .add(output, 1)
 
 

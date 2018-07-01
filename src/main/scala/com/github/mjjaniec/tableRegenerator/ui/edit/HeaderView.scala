@@ -1,7 +1,7 @@
-package com.github.mjjaniec.tableRegenerator.ui
+package com.github.mjjaniec.tableRegenerator.ui.edit
 
 import com.vaadin.ui.themes.ValoTheme
-import com.vaadin.ui.{Button, HorizontalLayout, Label, TextField}
+import com.vaadin.ui.{Button, HorizontalLayout, TextField}
 
 class HeaderView(headers: Seq[String], lengths: Seq[Int], addAction: Unit => Unit) extends HorizontalLayout {
 

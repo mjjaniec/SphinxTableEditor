@@ -1,5 +1,6 @@
 package com.github.mjjaniec.tableRegenerator.ui
 
+import com.github.mjjaniec.tableRegenerator.ui.main.MainView
 import com.vaadin.server.{Page, VaadinRequest}
 import com.vaadin.ui._
 

@@ -1,7 +1,7 @@
-package com.github.mjjaniec.tableRegenerator.ui
+package com.github.mjjaniec.tableRegenerator.ui.edit
 
-import com.vaadin.ui.themes.ValoTheme
 import com.vaadin.ui._
+import com.vaadin.ui.themes.ValoTheme
 
 class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit) extends HorizontalLayout {
 

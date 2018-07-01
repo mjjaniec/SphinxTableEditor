@@ -1,6 +1,7 @@
-package com.github.mjjaniec.tableRegenerator.ui
+package com.github.mjjaniec.tableRegenerator.ui.edit
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer}
+import com.github.mjjaniec.tableRegenerator.ui.main.MainView
 import com.vaadin.ui._
 import com.vaadin.ui.themes.ValoTheme
 
