@@ -1,49 +1,26 @@
-package com.github.mjjaniec.tableRegenerator.ui.edit
+package com.github.mjjaniec.tableRegenerator
+package ui.edit
 
+import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
 import com.vaadin.ui._
-import com.vaadin.ui.themes.ValoTheme
 
 class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit) extends HorizontalLayout {
 
+  private val self = Vui.mod(this).widthFull
 
   private val add = new Button()
 
   private val editors: Seq[TextArea] = for {
     (cell, len) <- row zip lengths
   } yield {
-    val tf = new TextArea(null, cell)
-    tf.setWidth("100%")
-    addComponent(tf)
-    setExpandRatio(tf, len)
-    tf
+    Vui.textArea.wordWrap(false).widthFull.value(cell).get.setup(self.add(_, len))
   }
 
   {
-
-    val vert = new VerticalLayout()
-    vert.setMargin(false)
-    vert.setSizeUndefined()
-
-    val delete = new Button()
-    delete.addClickListener(_ => deleteAction.apply(this))
-    delete.addStyleName(ValoTheme.BUTTON_SMALL)
-    delete.addStyleName(ValoTheme.BUTTON_DANGER)
-    delete.setCaption("x")
-    delete.setWidth("37px")
-    delete.setHeight("37px")
-
-    add.addStyleName(ValoTheme.BUTTON_SMALL)
-    add.addStyleName(ValoTheme.BUTTON_FRIENDLY)
-    add.setCaption("+")
-    add.setWidth("37px")
-    add.setHeight("37px")
-
-    vert.addComponents(delete, add)
-    vert.setComponentAlignment(add, Alignment.MIDDLE_CENTER)
-    vert.setComponentAlignment(delete, Alignment.MIDDLE_CENTER)
-    vert.setHeight("100%")
-
-    addComponent(vert)
+    self.add(Vui.verticalLayout.margin(false).sizeUndefined
+    .add(Buttons.deleteButton(this, deleteAction), Vui.Align.MiddleCenter)
+    .add(Buttons.addButton(_ => ()), Vui.Align.MiddleCenter)
+    .get)
 
     setWidth("100%")
   }

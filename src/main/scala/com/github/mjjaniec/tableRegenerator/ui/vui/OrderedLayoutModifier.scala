@@ -12,4 +12,6 @@ class OrderedLayoutModifier[L <: AbstractOrderedLayout](l: L) extends LayoutModi
   def add(c:Component, alignment: Alignment): this.type = add(c).alignment(c, alignment)
   def add(c:Component, expandRatio: Float, alignment: Alignment): this.type =
     add(c).expandRation(c, expandRatio).alignment(c, alignment)
+
+  def margin(margin: Boolean): this.type = mod(_.setMargin(margin))
 }

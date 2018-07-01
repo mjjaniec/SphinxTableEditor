@@ -2,6 +2,7 @@ package com.github.mjjaniec.tableRegenerator.ui.edit
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer}
 import com.github.mjjaniec.tableRegenerator.ui.main.MainView
+import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
 import com.vaadin.ui._
 import com.vaadin.ui.themes.ValoTheme
 
@@ -10,7 +11,7 @@ import scala.collection.mutable
 class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
 
   private val lengths = TableDrawer.computeLengts(data)
-  private val rowsLayout = new VerticalLayout()
+  private val rowsLayout = Vui.verticalLayout.margin(false).get
   private val rows: mutable.Buffer[RowView] = mutable.Buffer.empty[RowView]
 
   private val deleteAction: RowView => Unit = r => {
@@ -52,36 +53,21 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
     }.foreach(rows += _)
 
     setSizeFull()
-    val save = new Button("Save")
-    save.addStyleName(ValoTheme.BUTTON_PRIMARY)
-    save.addClickListener { _ =>
+    val save = Vui.button.caption("Save").primary.onClick { _ =>
       val result = TableData(header.getHeaders, rows.map(_.getRow))
       mainView.setOutput(TableDrawer.drawTable(result, None))
       mainView.setInput(TableDrawer.drawTable(result, None))
       getUI.setContent(mainView)
-    }
+    }.get
 
-    val cancel = new Button("Cancel")
-    cancel.addClickListener(_ => getUI.setContent(mainView))
+    val cancel = Vui.button.caption("Cancel").onClick(_ => getUI.setContent(mainView)).get
 
-    addComponent(header)
-    val rowsPanel = new Panel()
-    rowsPanel.setSizeFull()
-    rowsPanel.addStyleName(ValoTheme.PANEL_BORDERLESS)
-    rowsLayout.setMargin(false)
     rowsLayout.addComponents(rows: _*)
-    rowsPanel.setContent(rowsLayout)
 
-    addComponent(rowsPanel)
-
-    val buttons = new HorizontalLayout(cancel, save)
-    buttons.setSizeUndefined()
-
-    addComponent(buttons)
-    setExpandRatio(rowsPanel, 1)
-    setExpandRatio(buttons, 0)
-    setExpandRatio(header, 0)
-    setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT)
+    Vui.mod(this)
+      .add(header)
+        .add(Vui.panel.sizeFull.style(ValoTheme.PANEL_BORDERLESS).content(rowsLayout).get, 1)
+        .add(Vui.horizontalLayout.add(cancel).add(save).sizeUndefined.get, 0, Vui.Align.BottomRight)
   }
 
 }
