@@ -1,8 +1,9 @@
-package com.github.mjjaniec.tableRegenerator.ui.modifiers
+package com.github.mjjaniec.tableRegenerator.ui.vui
 
-import com.vaadin.ui._
+import com.vaadin.ui.{Button, Component, HorizontalLayout, Label, TextArea, TextField, VerticalLayout}
 
-object Mods {
+
+object Vui {
   def mod(textArea: TextArea): TextAreaModifier = new TextAreaModifier(textArea)
   def textArea: TextAreaModifier = mod(new TextArea())
 
@@ -23,5 +24,18 @@ object Mods {
 
   def hSpace(width: String): Component = label.width(width).get
   def vSpace(height: String): Component = label.height(height).widthUndefined.get
+
+  object Alignment {
+    import com.vaadin.ui.{Alignment => A}
+    val TopLeft: A = A.TOP_LEFT
+    val TopCenter: A = A.TOP_CENTER
+    val TopRight: A = A.TOP_RIGHT
+    val MiddleLeft: A = A.MIDDLE_LEFT
+    val MiddleCenter: A = A.MIDDLE_CENTER
+    val MiddleRight: A = A.MIDDLE_RIGHT
+    val BottomLeft: A = A.BOTTOM_LEFT
+    val BottomCenter: A = A.BOTTOM_CENTER
+    val BottomRight: A = A.BOTTOM_RIGHT
+  }
 
 }

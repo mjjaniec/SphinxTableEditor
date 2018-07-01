@@ -1,4 +1,4 @@
-package com.github.mjjaniec.tableRegenerator.ui.modifiers
+package com.github.mjjaniec.tableRegenerator.ui.vui
 
 import com.vaadin.ui.{Component, Layout}
 

@@ -1,29 +1,25 @@
 package com.github.mjjaniec.tableRegenerator.ui.edit
 
-import com.vaadin.ui.themes.ValoTheme
-import com.vaadin.ui.{Button, HorizontalLayout, TextField}
+import com.github.mjjaniec.tableRegenerator.ui.vui.{OrderedLayoutModifier, Vui}
+import com.vaadin.ui.{HorizontalLayout, TextField}
 
 class HeaderView(headers: Seq[String], lengths: Seq[Int], addAction: Unit => Unit) extends HorizontalLayout {
+
+  private val self: OrderedLayoutModifier[HorizontalLayout] = Vui.mod(this).widthFull
 
   private val editors: Seq[TextField] = for {
     (h, l) <- headers zip lengths
   } yield {
-    val tf = new TextField(null, h)
-    tf.setWidth("100%")
-    addComponent(tf)
-    setExpandRatio(tf, l)
+    val tf = Vui.textField.value(h).widthFull.get
+    self.add(tf, l)
     tf
   }
 
   {
-    setWidth("100%")
-    val add = new Button("+")
-    add.addStyleName(ValoTheme.BUTTON_FRIENDLY)
-    add.addStyleName(ValoTheme.BUTTON_SMALL)
-    add.setWidth("37px")
-    add.setHeight("37px")
-    add.addClickListener(_ => addAction.apply())
-    addComponent(add)
+    self.add(Vui.button.caption("+")
+      .friendly.small.width("37px").height("37px")
+      .onClick(_ => addAction.apply())
+      .get)
   }
 
   def getHeaders: Seq[String] = editors.map(_.getValue)
