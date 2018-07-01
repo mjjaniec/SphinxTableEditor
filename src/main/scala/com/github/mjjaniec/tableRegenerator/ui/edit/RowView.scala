@@ -2,13 +2,13 @@ package com.github.mjjaniec.tableRegenerator
 package ui.edit
 
 import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
-import com.vaadin.ui._
+import com.vaadin.ui.{Button, HorizontalLayout, TextArea}
 
 class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit) extends HorizontalLayout {
 
   private val self = Vui.mod(this).widthFull
 
-  private val add = new Button()
+  private val addButton: Button = Buttons.addButton(_ => ())
 
   private val editors: Seq[TextArea] = for {
     (cell, len) <- row zip lengths
@@ -17,16 +17,15 @@ class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit
   }
 
   {
-    self.add(Vui.verticalLayout.margin(false).sizeUndefined
-    .add(Buttons.deleteButton(this, deleteAction), Vui.Align.MiddleCenter)
-    .add(Buttons.addButton(_ => ()), Vui.Align.MiddleCenter)
-    .get)
-
-    setWidth("100%")
+    self.add(Vui.verticalLayout
+      .margin(false).widthUndefined
+      .add(Buttons.deleteButton(this, deleteAction), Vui.Align.MiddleCenter)
+      .add(addButton, Vui.Align.MiddleCenter)
+      .get)
   }
 
   def setAddAction(action: RowView => Unit): Unit = {
-    add.addClickListener(_ => action.apply(this))
+    addButton.addClickListener(_ => action.apply(this))
   }
 
 
