@@ -1,37 +1,55 @@
 package com.github.mjjaniec.tableRegenerator.ui
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer}
+import com.vaadin.ui._
 import com.vaadin.ui.themes.ValoTheme
-import com.vaadin.ui.{Alignment, Button, Panel, VerticalLayout}
 
 import scala.collection.mutable
 
 class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
 
   private val lengths = TableDrawer.computeLengts(data)
-  private val header: HeaderView = new HeaderView(data.headers, lengths)
   private val rowsLayout = new VerticalLayout()
+  private val rows: mutable.Buffer[RowView] = mutable.Buffer.empty[RowView]
 
-  private val rows: mutable.Buffer[RowView] = data.rows.map { row =>
-    val deleteAction: RowView => Unit = r => {
-      rows.remove(rows.indexOf(r))
-      rowsLayout.removeComponent(r)
-    }
+  private val deleteAction: RowView => Unit = r => {
+    rows.remove(rows.indexOf(r))
+    rowsLayout.removeComponent(r)
+  }
 
-    val addAction: RowView => Unit = r => {
-      val index = rows.indexOf(r) + 1
-      val newRow = new RowView(lengths.map(_ => ""), lengths, deleteAction)
-      rows.insert(index, newRow)
-      rowsLayout.addComponent(newRow, index)
-    }
+  private val addAction1: RowView => RowView = r => {
+    val index = rows.indexOf(r) + 1
+    val newRow = new RowView(lengths.map(_ => ""), lengths, deleteAction)
+    rows.insert(index, newRow)
+    rowsLayout.addComponent(newRow, index)
+    newRow
+  }
 
-    val rv = new RowView(row, lengths, deleteAction)
-    rv.setAddAction(addAction)
-    rv
-  }.toBuffer
+  private val addAction2: RowView => Unit =
+    addAction1.andThen(r => r.setAddAction(addAction1.andThen(_.setAddAction(r => addAction1(r)))))
+
+  private val addAction3: Unit => RowView = _ => {
+    val newRow = new RowView(lengths.map(_ => ""), lengths, deleteAction)
+    rows.insert(0, newRow)
+    rowsLayout.addComponent(newRow, 0)
+    newRow
+  }
+
+  val addAction4: Unit => Unit =
+    addAction3.andThen(r => r.setAddAction(addAction1.andThen(_.setAddAction(r => addAction1(r)))))
+
+
+  private val header: HeaderView = new HeaderView(data.headers, lengths, addAction4)
 
 
   {
+    data.rows.map { row =>
+      val rv = new RowView(row, lengths, deleteAction)
+      rv.setAddAction(addAction2)
+      rowsLayout.addComponent(rv)
+      rv
+    }.foreach(rows += _)
+
     setSizeFull()
     val save = new Button("Save")
     save.addStyleName(ValoTheme.BUTTON_PRIMARY)
@@ -41,6 +59,9 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
       mainView.setInput(TableDrawer.drawTable(result, None))
       getUI.setContent(mainView)
     }
+
+    val cancel = new Button("Cancel")
+    cancel.addClickListener(_ => getUI.setContent(mainView))
 
     addComponent(header)
     val rowsPanel = new Panel()
@@ -52,11 +73,14 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
 
     addComponent(rowsPanel)
 
-    addComponent(save)
-    setComponentAlignment(save, Alignment.BOTTOM_RIGHT)
+    val buttons = new HorizontalLayout(cancel, save)
+    buttons.setSizeUndefined()
+
+    addComponent(buttons)
     setExpandRatio(rowsPanel, 1)
-    setExpandRatio(save, 0)
+    setExpandRatio(buttons, 0)
     setExpandRatio(header, 0)
+    setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT)
   }
 
 }
