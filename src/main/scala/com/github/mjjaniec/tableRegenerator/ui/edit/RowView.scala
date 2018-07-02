@@ -20,6 +20,7 @@ class RowView(row: Seq[String], lengths: Seq[Int], deleteAction: RowView => Unit
     self.add(Vui.verticalLayout
       .margin(false).widthUndefined
       .add(Buttons.deleteButton(this, deleteAction), Vui.Align.MiddleCenter)
+      .add(Buttons.duplicateButton(this, _ => ()), Vui.Align.MiddleCenter)
       .add(addButton, Vui.Align.MiddleCenter)
       .get)
   }

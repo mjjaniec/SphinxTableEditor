@@ -13,4 +13,6 @@ class ButtonModifier(b: Button) extends ComponentModifier[Button](b) {
 
   def onClick(listener: Button.ClickListener): this.type = mod(_.addClickListener(listener))
 
+  def disableTabStop: this.type = mod(_.setTabIndex(-1))
+
 }

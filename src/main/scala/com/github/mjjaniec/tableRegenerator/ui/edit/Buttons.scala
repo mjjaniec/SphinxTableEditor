@@ -4,16 +4,24 @@ import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
 import com.vaadin.ui.Button
 
 object Buttons {
+  private val buttonWidth = "40px"
+
   def addButton(addAction: Unit => Unit ): Button = Vui
     .button.caption("+").friendly
+    .width(buttonWidth)
+    .disableTabStop
     .onClick(_ => addAction.apply()).get
 
   def duplicateButton(rowView: RowView, duplicateAction: RowView => Unit): Button = Vui
     .button.caption("2x").friendly
+    .width(buttonWidth)
+    .disableTabStop
     .onClick(_ => duplicateAction.apply(rowView)).get
 
   def deleteButton(rowView: RowView, deleteAction: RowView => Unit): Button = Vui
     .button.caption("x").danger
+    .width(buttonWidth)
+    .disableTabStop
     .onClick(_ => deleteAction.apply(rowView)).get
 
 
