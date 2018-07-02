@@ -14,7 +14,7 @@ class VaadinJettyServer(ui: Class[_ <: UI],
   private val holder: ServletHolder = new ServletHolder().setup { h =>
     h.setServlet(new SimpleVaadinServlet(iconPath))
     h.setInitParameter("ui", ui.getName)
-    h.setInitParameter("productionMode", productionMode.toString)
+    h.setInitParameter("productionMode", "false")
     h.setInitParameter("widgetset", widgetSet)
     h.setInitOrder(0)
   }

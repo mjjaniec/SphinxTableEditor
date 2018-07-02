@@ -1,0 +1,51 @@
+
+
+$v-background-color: #fafafa;
+$v-app-background-color: #f8f8f8;
+$v-panel-background-color: #fff;
+
+$v-focus-color: #3557B5;
+$v-friendly-color: #639E33;
+$v-danger-color: #B13D3A;
+
+$v-border-radius: 0;
+$v-textfieldpx-border-radius: 0;
+$v-font-family: Helvetica, Arial, 'lucida grande', tahoma, verdana, arial, sans-serif;
+$v-font-size: 14px;
+$v-font-color: #37404E;
+$v-font-weight: 400;
+$v-link-text-decoration: none;
+
+$v-bevel: false;
+$v-gradient: false;
+$v-shadow: false;
+$v-textfield-bevel: false;
+$v-textfield-shadow: false;
+
+$v-unit-size: 30px;
+$v-overlay-shadow: 0 3px 8px v-shade, 0 0 0 1px (v-shade 0.7);
+$v-shadow-opacity: 20%;
+$v-selection-overlay-padding-horizontal: 0;
+$v-selection-overlay-padding-vertical: 6px;
+$v-selection-item-border-radius: 0;
+
+$v-layout-margin-top: 12px;
+$v-layout-margin-left: 12px;
+$v-layout-margin-right: 12px;
+$v-layout-margin-bottom: 12px;
+
+$v-layout-spacing-vertical: 8px;
+$v-layout-spacing-horizontal: 8px;
+
+@import "../valo/valo.scss";
+
+@mixin compact {
+  @include valo;
+
+  .v-textarea, .v-textfield {
+    font-family: monospace;
+  }
+
+
+
+}
