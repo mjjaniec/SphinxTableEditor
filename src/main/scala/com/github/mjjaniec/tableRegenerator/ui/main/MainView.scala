@@ -1,7 +1,7 @@
 package com.github.mjjaniec.tableRegenerator
 package ui.main
 
-import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer, TableParser}
+import com.github.mjjaniec.tableRegenerator.logic.{ParseError, TableData, TableDrawer, TableParser}
 import com.github.mjjaniec.tableRegenerator.ui.edit.EditView
 import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
 import com.vaadin.ui.VerticalLayout
@@ -27,15 +27,21 @@ class MainView extends VerticalLayout {
       Vui.notification("Please paste a sphinx table above").info.show()
     } else {
       TableParser.parse(jaggedTable) match {
-        case Success(tableData) => action(tableData)
-        case Failure(_) => Vui.notification("Invalid table:").error.show()
+        case tableData: TableData => action(tableData)
+        case ParseError(pos, message) =>
+          Vui.notification(s"Invalid table: $message").error
+            .onClose { _ =>
+              input.setCursorPosition(pos)
+              input.focus()
+            }
+            .show()
       }
     }
   }
 
   private val regenerate = Vui.button.caption("Regenerate").primary.onClick { _ =>
-      withTable(TableDrawer.drawTable(_, Try(maxCellWidth.getValue.toInt).toOption) |> output.setValue)
-    }.get
+    withTable(TableDrawer.drawTable(_, Try(maxCellWidth.getValue.toInt).toOption) |> output.setValue)
+  }.get
 
 
   private val edit = Vui.button.caption("Edit").onClick { _ =>

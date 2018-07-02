@@ -1,7 +1,6 @@
 package com.github.mjjaniec.tableRegenerator.logic
 
 import scala.collection.mutable
-import scala.util.Try
 import scala.util.matching.Regex
 
 
@@ -9,13 +8,15 @@ object TableParser {
 
   private val HorizontalLine: Regex = "\\+([-=]+\\+)+".r
 
-  def parse(table: String): Try[TableData] = {
-    Try {
+  def parse(table: String): ParseResult = {
 
-      val lines = table.split("\n")
-        .toVector.map(_.trim)
-        .dropWhile(!_.matches(HorizontalLine.regex))
+    val lines = table.split("\n")
+      .toVector.map(_.trim)
+      .dropWhile(!_.matches(HorizontalLine.regex))
 
+    if (lines.isEmpty) {
+      ParseError(0, "This is not a Sphinx table")
+    } else {
       val columns = lines(0).count(_ == '+') - 1
 
       var target: Vector[StringBuilder] = null
