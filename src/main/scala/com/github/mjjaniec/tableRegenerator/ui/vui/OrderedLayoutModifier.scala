@@ -5,6 +5,9 @@ import com.vaadin.ui.{AbstractOrderedLayout, Alignment, Component}
 
 class OrderedLayoutModifier[L <: AbstractOrderedLayout](l: L) extends LayoutModifier[L](l) {
 
+  {
+    margin(false)
+  }
 
   def expandRation(c: Component, expandRation: Float): this.type = mod(_.setExpandRatio(c, expandRation))
 
@@ -18,6 +21,8 @@ class OrderedLayoutModifier[L <: AbstractOrderedLayout](l: L) extends LayoutModi
     add(c).expandRation(c, expandRatio).alignment(c, alignment)
 
   def margin(margin: Boolean): this.type = mod(_.setMargin(margin))
+
+  def margin: this.type = margin(true)
 
   def margin(marginInfo: MarginInfo): this.type = mod(_.setMargin(marginInfo))
 

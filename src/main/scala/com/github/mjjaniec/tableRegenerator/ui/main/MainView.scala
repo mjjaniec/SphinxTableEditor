@@ -60,7 +60,7 @@ class MainView extends VerticalLayout {
     .get
 
   Vui.mod(this)
-    .sizeFull
+    .sizeFull.margin
     .add(input, 1)
     .add(Vui.horizontalLayout.widthUndefined
       .add(regenerate)
