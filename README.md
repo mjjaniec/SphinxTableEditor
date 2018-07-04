@@ -5,6 +5,8 @@ Click Save and you will see your table back in Sphinx format.
 
 If you want only to fix a broken table then just paste and click regenerate.
 
+![Usage example](https://github.com/mjjaniec/SphinxTableEditor/blob/master/TableEditorAnimation.gif?raw=true)
+
 
 ## Errors / Feature requests
 Feel free to submit errors or feature request using Issues tab on github.
