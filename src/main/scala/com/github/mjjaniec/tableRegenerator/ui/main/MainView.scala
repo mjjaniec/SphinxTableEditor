@@ -50,7 +50,7 @@ class MainView extends VerticalLayout {
     withTable(tableData => getUI.setContent(new EditView(this, tableData)))
   }.get
 
-  private val example = Vui.button.caption("Example").onClick(_ =>
+  private val example = Vui.button.caption("Example").onClick { _ =>
     input.setValue(
       """+------------------------+------------+----------+----------+
         || Header row, column 1   | Header 2   | Header 3 | Header 4 |
@@ -58,17 +58,19 @@ class MainView extends VerticalLayout {
         || body row 1, column 1   | column 2   | column 3 | column 4 |
         |+------------------------+------------+----------+----------+
         || body row 2             | ...        | ...      |          |
-        |+------------------------+------------+----------+----------+""".stripMargin))
-    .get
+        |+------------------------+------------+----------+----------+""".stripMargin)
+    import com.vaadin.ui.JavaScript
+    JavaScript.getCurrent.execute("vaadin.forceLayout();")
+  }.get
 
   Vui.mod(this)
     .sizeFull.margin
     .add(Vui.label.value("Sphinx table editor").style(ValoTheme.LABEL_COLORED, ValoTheme.LABEL_LARGE, ValoTheme.LABEL_BOLD).get)
     .add(input, 1)
-    .add(Vui.horizontalLayout.widthUndefined
+    .add(Vui.horizontalLayout.sizeUndefined
       .add(regenerate)
       .add(maxCellWidth)
-      .add(Vui.hSpace("40px"))
+      .add(Vui.hSpace("80px"))
       .add(edit)
       .add(example)
       .get, 0)
