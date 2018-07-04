@@ -2,7 +2,9 @@ package com.github.mjjaniec.tableRegenerator.ui.edit
 
 import com.github.mjjaniec.tableRegenerator.logic.{TableData, TableDrawer}
 import com.github.mjjaniec.tableRegenerator.ui.main.MainView
+import com.github.mjjaniec.tableRegenerator.ui.theme.Compact
 import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
+import com.vaadin.shared.ui.MarginInfo
 import com.vaadin.ui._
 import com.vaadin.ui.themes.ValoTheme
 
@@ -64,10 +66,18 @@ class EditView(mainView: MainView, data: TableData) extends VerticalLayout {
 
     rowsLayout.addComponents(rows: _*)
 
+    def withScrollMargin(component: Component): Component = Vui.horizontalLayout.widthFull.spacing(false)
+      .add(component, 1)
+      .add(Vui.panel.sizeUndefined
+        .style(ValoTheme.PANEL_BORDERLESS, Compact.Panel.ScrollAlwaysOn, Compact.Visibility.Hidden).get, 0)
+      .get
+
     Vui.mod(this)
-      .add(header)
-        .add(Vui.panel.sizeFull.style(ValoTheme.PANEL_BORDERLESS).content(rowsLayout).get, 1)
-        .add(Vui.horizontalLayout.add(cancel).add(save).sizeUndefined.get, 0, Vui.Align.BottomRight)
+      .margin(new MarginInfo(true, false, true, true))
+      .add(withScrollMargin(header))
+      .add(Vui.panel.sizeFull.content(rowsLayout)
+        .style(ValoTheme.PANEL_BORDERLESS, Compact.Panel.ScrollAlwaysOn).get, 1)
+      .add(withScrollMargin(Vui.horizontalLayout.add(cancel).add(save).sizeUndefined.get), 0)
   }
 
 }

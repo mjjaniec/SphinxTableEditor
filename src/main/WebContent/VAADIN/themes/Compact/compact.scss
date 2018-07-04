@@ -22,6 +22,8 @@ $v-shadow: false;
 $v-textfield-bevel: false;
 $v-textfield-shadow: false;
 
+$v-focus-style: 0 0 0 1px rgba($v-focus-color, .5);
+
 $v-unit-size: 30px;
 $v-overlay-shadow: 0 3px 8px v-shade, 0 0 0 1px (v-shade 0.7);
 $v-shadow-opacity: 20%;
@@ -29,13 +31,16 @@ $v-selection-overlay-padding-horizontal: 0;
 $v-selection-overlay-padding-vertical: 6px;
 $v-selection-item-border-radius: 0;
 
-$v-layout-margin-top: 12px;
-$v-layout-margin-left: 12px;
-$v-layout-margin-right: 12px;
-$v-layout-margin-bottom: 12px;
+$margin-size: 12px;
+$spacing-size: 8px;
 
-$v-layout-spacing-vertical: 8px;
-$v-layout-spacing-horizontal: 8px;
+$v-layout-margin-top: $margin-size;
+$v-layout-margin-left: $margin-size;
+$v-layout-margin-right: $margin-size;
+$v-layout-margin-bottom: $margin-size;
+
+$v-layout-spacing-vertical: $spacing-size;
+$v-layout-spacing-horizontal: $spacing-size;
 
 @import "../valo/valo.scss";
 
@@ -46,6 +51,14 @@ $v-layout-spacing-horizontal: 8px;
     font-family: monospace;
   }
 
+  .scrollAlwaysOn > .v-scrollable {
+    padding-right: $margin-size;
+    padding-top: 2px;
+    overflow-y: scroll;
+  }
 
+  .visibility-hidden {
+    visibility: hidden;
+  }
 
 }
