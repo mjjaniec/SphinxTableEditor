@@ -9,4 +9,7 @@ object Compact {
     val Hidden = "visibility-hidden"
   }
 
+  object LineHeight {
+    val Zero = "line-height-zero"
+  }
 }

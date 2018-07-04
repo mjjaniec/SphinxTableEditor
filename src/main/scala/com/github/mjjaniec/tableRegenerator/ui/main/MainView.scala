@@ -5,18 +5,20 @@ import com.github.mjjaniec.tableRegenerator.logic.{ParseError, TableData, TableD
 import com.github.mjjaniec.tableRegenerator.ui.edit.EditView
 import com.github.mjjaniec.tableRegenerator.ui.vui.Vui
 import com.vaadin.ui.VerticalLayout
+import com.vaadin.ui.themes.ValoTheme
 import org.apache.commons.lang3.StringUtils
 
 class MainView extends VerticalLayout {
 
-  private val input = Vui.textArea.caption("Input")
+  private val input = Vui.textArea
     .wordWrap(false)
-    .placeholder("Paste broken table here")
+    .placeholder("Paste a (broken) table here")
     .sizeFull
     .get
 
-  private val output = Vui.textArea.caption("Output")
+  private val output = Vui.textArea
     .wordWrap(false).sizeFull
+    .placeholder("Output")
     .get
 
   private val maxCellWidth = Vui.textField.placeholder("Max cell width").get
@@ -44,7 +46,7 @@ class MainView extends VerticalLayout {
   }.get
 
 
-  private val edit = Vui.button.caption("Edit").onClick { _ =>
+  private val edit = Vui.button.caption("Edit").primary.onClick { _ =>
     withTable(tableData => getUI.setContent(new EditView(this, tableData)))
   }.get
 
@@ -61,6 +63,7 @@ class MainView extends VerticalLayout {
 
   Vui.mod(this)
     .sizeFull.margin
+    .add(Vui.label.value("Sphinx table editor").style(ValoTheme.LABEL_COLORED, ValoTheme.LABEL_LARGE, ValoTheme.LABEL_BOLD).get)
     .add(input, 1)
     .add(Vui.horizontalLayout.widthUndefined
       .add(regenerate)
@@ -70,6 +73,7 @@ class MainView extends VerticalLayout {
       .add(example)
       .get, 0)
     .add(output, 1)
+    .add(GithubLink.create("mjjaniec", "SphinxTableEditor", "#3C89D9"))
 
 
   def setOutput(output: String): Unit = {

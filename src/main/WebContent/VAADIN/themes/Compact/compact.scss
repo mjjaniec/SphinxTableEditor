@@ -61,4 +61,8 @@ $v-layout-spacing-horizontal: $spacing-size;
     visibility: hidden;
   }
 
+  .v-widget.line-height-zero {
+    line-height: 0;
+  }
+
 }
