@@ -1,9 +1,10 @@
 # SphinxTableEditor
-Sphinx table editor is a tool that ease edition of sphinx tables
-Just paste table (it even might be broken or badly aligned) and click edit. A wisual edition tool will be opened.
+Sphinx table editor is a tool that ease edition of sphinx tables.
+
+Just paste a table (it even might be broken or badly aligned) and click edit. A visual edition tool will be opened.
 Click Save and you will see your table back in Sphinx format.
 
-If you want only to fix a broken table then just paste and click regenerate.
+If you want only to fix a broken table then just paste it and click Regenerate.
 
 ![Usage example](https://github.com/mjjaniec/SphinxTableEditor/blob/master/TableEditorAnimation.gif?raw=true)
 
@@ -11,7 +12,6 @@ If you want only to fix a broken table then just paste and click regenerate.
 ## Errors / Feature requests
 Feel free to submit errors or feature request using Issues tab on github.
 If your table does not get regenerated correctly please append it to the request. 
-Thanks in advance
 
 
 ## Developer info
