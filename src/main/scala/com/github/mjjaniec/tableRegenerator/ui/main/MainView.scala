@@ -21,6 +21,11 @@ class MainView extends VerticalLayout {
     .placeholder("Output")
     .get
 
+  private def fixVaadinLayout(): Unit = {
+    import com.vaadin.ui.JavaScript
+    JavaScript.getCurrent.execute("vaadin.forceLayout();")
+  }
+
   private val maxCellWidth = Vui.textField.placeholder("Max cell width").get
 
   private def withTable(action: TableData => Unit): Unit = {
@@ -43,6 +48,7 @@ class MainView extends VerticalLayout {
 
   private val regenerate = Vui.button.caption("Regenerate").primary.onClick { _ =>
     withTable(TableDrawer.drawTable(_, Try(maxCellWidth.getValue.toInt).toOption) |> output.setValue)
+    fixVaadinLayout()
   }.get
 
 
@@ -59,8 +65,7 @@ class MainView extends VerticalLayout {
         |+------------------------+------------+----------+----------+
         || body row 2             | ...        | ...      |          |
         |+------------------------+------------+----------+----------+""".stripMargin)
-    import com.vaadin.ui.JavaScript
-    JavaScript.getCurrent.execute("vaadin.forceLayout();")
+    fixVaadinLayout()
   }.get
 
   Vui.mod(this)
