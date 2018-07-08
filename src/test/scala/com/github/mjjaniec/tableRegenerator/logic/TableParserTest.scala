@@ -124,7 +124,7 @@ class TableParserTest extends FlatSpec {
         || body row 2           | ...      | ...      | x_X      |
         ||                      | ...      |          |          |
         ||                      | ...      |          |          |
-        |+----------------------+----------+----------+----------+"""
+        |+----------------------+----------+----------+----------+""".stripMargin
 
     val tableParsed = TableData(
       Seq("Header row, column 1", "Header 2", "Header 3", "Header 4"),
