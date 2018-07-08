@@ -23,6 +23,30 @@ class TableParserTest extends FlatSpec {
     expectTable(tableParsed, TableParser.parse(tableText))
   }
 
+  "surrounding whitespaces" should "be ignored" in {
+    val tableText =
+      """
+        |
+        |
+        |+------------------------+------------+----------+----------+
+        || Header row, column 1   | Header 2   | Header 3 | Header 4 |
+        |+========================+============+==========+==========+
+        || body row 1, column 1   | column 2   | column 3 | column 4 |
+        |+------------------------+------------+----------+----------+
+        || body row 2             | ...        | ...      |          |
+        |+------------------------+------------+----------+----------+
+        |
+        |   """.stripMargin
+    val tableParsed = TableData(
+      Seq("Header row, column 1", "Header 2", "Header 3", "Header 4"),
+      Seq(
+        Seq("body row 1, column 1", "column 2", "column 3", "column 4"),
+        Seq("body row 2", "...", "...", "")
+      ))
+
+    expectTable(tableParsed, TableParser.parse(tableText))
+  }
+
   "a jagged table" should "be correctly parsed" in {
     val tableText =
       """+------------------------+------------+----------+----------+
@@ -61,7 +85,59 @@ class TableParserTest extends FlatSpec {
     expectTable(tableParsed, TableParser.parse(tableText))
   }
 
-  "a table with multi-line cel" should "be correctly parsed" in {
+  "a table with valid multi-line cells" should "be correctly parsed" in {
+    val tableText =
+      """+----------------------+----------+----------+----------+
+        || Header row, column 1 | Header 2 | Header 3 | Header 4 |
+        |+======================+==========+==========+==========+
+        || body row 1,          |          | column 3 | column 4 |
+        || column 1 another row |          |          | mor data |
+        |+----------------------+----------+----------+----------+
+        || body row 2           | ...      | ...      |          |
+        |+----------------------+----------+----------+----------+
+        |
+        |""".stripMargin
+
+    val tableParsed = TableData(
+      Seq("Header row, column 1", "Header 2", "Header 3", "Header 4"),
+      Seq(
+        Seq("body row 1,\ncolumn 1 another row", "", "column 3", "column 4\nmor data"),
+        Seq("body row 2", "...", "...", "")
+      ))
+
+    expectTable(tableParsed, TableParser.parse(tableText))
+
+  }
+
+  "another tale with valid multi-line cells" should "be correctly parsed" in {
+    val tableText =
+      """+----------------------+----------+----------+----------+
+        || Header row, column 1 | Header 2 | Header 3 | Header 4 |
+        |+======================+==========+==========+==========+
+        || body row 1,          |          | column 3 | column 4 |
+        || column 1 another row |          |          | mor data |
+        |+----------------------+----------+----------+----------+
+        || body row 2           | ...      | ...      |          |
+        ||                      |          | ...      |          |
+        ||                      |          | ...      |          |
+        |+----------------------+----------+----------+----------+
+        || body row 2           | ...      | ...      | x_X      |
+        ||                      | ...      |          |          |
+        ||                      | ...      |          |          |
+        |+----------------------+----------+----------+----------+"""
+
+    val tableParsed = TableData(
+      Seq("Header row, column 1", "Header 2", "Header 3", "Header 4"),
+      Seq(
+        Seq("body row 1,\ncolumn 1 another row", "", "column 3", "column 4\nmor data"),
+        Seq("body row 2", "...", "...\n...\n...", ""),
+        Seq("body row 2", "...\n...\n...", "...", "x_X")
+      ))
+
+    expectTable(tableParsed, TableParser.parse(tableText))
+  }
+
+  "a table with invalid multi-line cells" should "be correctly parsed" in {
     val tableText =
       """+------------------------+------------+----------+----------+
         || Header row, column 1         | Header 2   | Header 3 | Header 4 |

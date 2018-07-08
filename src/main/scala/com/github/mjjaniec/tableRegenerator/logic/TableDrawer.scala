@@ -55,7 +55,6 @@ object TableDrawer {
         printHorizontalLine(printer, lengths, bold = false)
         rowNumber += 1
       }
-      printer.println()
     }
 
 
