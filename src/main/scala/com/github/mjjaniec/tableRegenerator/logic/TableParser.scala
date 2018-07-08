@@ -27,7 +27,7 @@ object TableParser {
         line match {
           case HorizontalLine(_) =>
             if (target != null) {
-              data += target.map(_.toString())
+              data += postProcess(target.map(_.toString()))
             }
             target = Vector.fill(columns)(new StringBuilder)
           case l =>
@@ -45,5 +45,9 @@ object TableParser {
 
       TableData(data.head, data.drop(1))
     }
+  }
+
+  private def postProcess(row: Vector[String]): Vector[String] = {
+    row.map(_.replaceAll("\n+$", ""))
   }
 }

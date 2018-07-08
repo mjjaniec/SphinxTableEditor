@@ -61,21 +61,26 @@ class TableParserTest extends FlatSpec {
     expectTable(tableParsed, TableParser.parse(tableText))
   }
 
-  "a table with multi-lin cel" should "be correctly parsed" in {
+  "a table with multi-line cel" should "be correctly parsed" in {
     val tableText =
       """+------------------------+------------+----------+----------+
         || Header row, column 1         | Header 2   | Header 3 | Header 4 |
         |+======+============+==========+=====================+
-        || body row 1, column 1              | column 2   | column 3 | column 4 |
-        || the same cel | column2 again| | >> |
-        |+-----------------------+------------+----------+--+
-        || body row 2     | ...        | ...    peszek|maria  |zec|makota |xyz|      |
+        || body row 1, column 1
+        | the same cel | column 2 | column 3 |
+        | >> |
+        |+----------------+------------+----------+--+
+        || body row 2     | ala
+        | ma drucianego
+        | kota | ...
+        | kiedyś spotkałem marię
+        | peszek| nic ciekawego      |
         |+------------------+------------+----------+----------+""".stripMargin
     val tableParsed = TableData(
       Seq("Header row, column 1", "Header 2", "Header 3", "Header 4"),
       Seq(
-        Seq("body row 1, column 1\nthe same cel", "column 2\ncolumn2 again", "column 3", "column 4\n>>"),
-        Seq("body row 2", "...", "...    peszek", "maria  |zec|makota |xyz|")
+        Seq("body row 1, column 1\nthe same cel", "column 2", "column 3", "\n>>"),
+        Seq("body row 2", "ala\nma drucianego\nkota", "...\nkiedyś spotakłem marię\npeszek", "nic ciekawego")
       ))
 
     expectTable(tableParsed, TableParser.parse(tableText))
